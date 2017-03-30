@@ -38,7 +38,7 @@
                 var forRoomHistory = {};
                 if (this.hotelObj[roomID] !== undefined) {
                     forRoomHistory = this.hotelObj[roomID];
-//                    forRoomHistory.roomNumber = roomID;
+                    forRoomHistory.roomNumber = roomID;
                     forRoomHistory.checkOutdate = currentDate;
                     delete this.hotelObj[roomID];
                     this.historyArray.push(forRoomHistory);
@@ -74,11 +74,16 @@
 
                 if (this.historyArray.length > 0) {
                     for (var i = 0; i < this.historyArray.length; i++) {
-                        if (this.historyArray[i].roomId = roomID) {
+                        if (this.historyArray[i].roomNumber === roomID) {
                             history.push(this.historyArray[i]);
                         }
                     }
-                    return history;
+                    if (history.length > 0) {
+                        return history;
+                    } else {
+                        console.error("This room has had no history");
+                        return false;
+                    }
                 } else {
                     console.error("Currently No History");
                     return false;
