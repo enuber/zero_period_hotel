@@ -4,92 +4,93 @@
 	<title></title>
 	<script>
 
-function Hotel(numOfRooms){
+        function Hotel(numOfRooms){
 
-    this.totalRooms = numOfRooms;
-    this.hotelObj = {};
-	this.historyArray = [];
+            this.totalRooms = numOfRooms;
+            this.hotelObj = {};
+            this.historyArray = [];
 
-    this.checkIn = function(roomID, name){
-        //add a guest to the hotel.
-        //store the guest and the room that they checked into
-        if (this.getVacancyCount() > 0) {
-            if (this.hotelObj[roomID] == undefined) {
+            this.checkIn = function(roomID, name){
+                //add a guest to the hotel.
+                //store the guest and the room that they checked into
+                if (this.getVacancyCount() > 0) {
+                    if (this.hotelObj[roomID] == undefined) {
+                        var currentDate = new Date();
+                        currentDate = currentDate.toUTCString();
+                        var room = {
+                            'name' : name,
+                            'checkInDate' : currentDate
+                        };
+                        this.hotelObj[roomID] = room;
+                    } else {
+                        console.error("This room is currently occupied");
+                        return false;
+                    }
+                } else {
+                    console.error("There Are No Rooms Left");
+                    return false;
+                }
+            };
+            this.checkOut = function(roomID){
+                //remove a guest from the hotel
                 var currentDate = new Date();
                 currentDate = currentDate.toUTCString();
-                var room = {
-                    'name' : name,
-                    'checkInDate' : currentDate
-				};
-                this.hotelObj[roomID] = room;
-            } else {
-                console.error("This room is currently occupied");
-                return false;
-			}
-        } else {
-            console.error("There Are No Rooms Left");
-            return false;
-        }
-    };
-    this.checkOut = function(roomID){
-        //remove a guest from the hotel
-        var currentDate = new Date();
-        currentDate = currentDate.toUTCString();
-        var forRoomHistory = {};
-        if (this.getVacancyCount()>0) {
-            forRoomHistory = this.hotelObj[roomID];
-            forRoomHistory.roomNumber = roomID;
-            forRoomHistory.checkOutdate = currentDate;
-            delete this.hotelObj[roomID];
-        } else {
-            console.error("No guests are currently staying, can't checkout a guest that doesn't have a room");
-            return false;
-        }
-    };
-	this.getGuestRegistry = function(){
-		//return the entire list of rooms and their guests in this format:
-		//array of objects [
-		//	{ name, roomID, checkedIn //the date and time they checked in}
-		// ]
-		var registry = [];
-		var roomObj = {};
-		if (this.getVacancyCount() > 0) {
-			for (key in this.hotelObj) {
-			    roomObj.name = this.hotelObj[key].name;
-			    roomObj.roomID = key;
-			    roomObj.checkedIn = this.hotelObj[key].checkInDate;
-			    registry.push(roomObj);
-			}
-			return(registry);
-		} else {
-		    console.error("The hotel is currently empty");
-		    return false;
-		}
-	};
-	this.getRoomHistory = function(roomID){
-		//returns an array of all guest who have stayed in a particular room,
-		//	including when they checked in, and when they checked out
-        var history = [];
-        var roomObj = {};
-        if (this.historyArray.length > 0) {
-			for (var i = 0; i < historyArray.length; i++) {
-			    if (historyArray[i].roomId = roomID) {
-			        history.push(historyArray[i]);
-				}
-			}
-			return history;
-        } else {
-            console.error("Currently No History");
-            return false;
-        }
-	};
-	this.getVacancyCount = function(){
-		//returns the number of unoccupied rooms
-		return (this.totalRooms - Object.keys(this.hotelObj).length);
-	};
-}
+                var forRoomHistory = {};
+                if (this.hotelObj[roomID] !== undefined) {
+                    forRoomHistory = this.hotelObj[roomID];
+//                    forRoomHistory.roomNumber = roomID;
+                    forRoomHistory.checkOutdate = currentDate;
+                    delete this.hotelObj[roomID];
+                    this.historyArray.push(forRoomHistory);
+                } else {
+                    console.error("No guests are currently staying, can't checkout a guest that doesn't have a room");
+                    return false;
+                }
+            };
+            this.getGuestRegistry = function(){
+                //return the entire list of rooms and their guests in this format:
+                //array of objects [
+                //	{ name, roomID, checkedIn //the date and time they checked in}
+                // ]
+                var registry = [];
+                if (this.getVacancyCount() > 0) {
+                    for (key in this.hotelObj) {
+                        var roomObj = {};
+                        roomObj.name = this.hotelObj[key].name;
+                        roomObj.roomID = key;
+                        roomObj.checkedIn = this.hotelObj[key].checkInDate;
+                        registry.push(roomObj);
+                    }
+                    return(registry);
+                } else {
+                    console.error("The hotel is currently empty");
+                    return false;
+                }
+            };
+            this.getRoomHistory = function(roomID){
+                //returns an array of all guest who have stayed in a particular room,
+                //	including when they checked in, and when they checked out
+                var history = [];
 
-var majestic = new Hotel(20);
+                if (this.historyArray.length > 0) {
+                    for (var i = 0; i < this.historyArray.length; i++) {
+                        if (this.historyArray[i].roomId = roomID) {
+                            history.push(this.historyArray[i]);
+                        }
+                    }
+                    return history;
+                } else {
+                    console.error("Currently No History");
+                    return false;
+                }
+            };
+            this.getVacancyCount = function(){
+                //returns the number of unoccupied rooms
+                return (this.totalRooms - Object.keys(this.hotelObj).length);
+            };
+        }
+
+        var majestic = new Hotel(20);
 
 	</script>
 </head>
