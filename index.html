@@ -6,18 +6,46 @@
 
 function Hotel(){
 
+    this.totalRooms = 20;
+    this.hotelArray = [];
+
 	this.checkIn = function(roomID, name){
-		//add a guest to the hotel.  
+		//add a guest to the hotel.
 		//store the guest and the room that they checked into
+		if (this.hotelArray.length < this.totalRooms) {
+            this.room = {};
+            this.room.roomID = roomID;
+            this.room.name = name;
+            this.hotelArray.push(this.room);
+        } else {
+		    console.log("There Are No Rooms Left");
+		}
 	}
 	this.checkOut = function(roomID){
 		//remove a guest from the hotel
+
+		if (this.hotelArray.length>0) {
+            for (var i = 0; i < this.hotelArray.length; i++) {
+                if (this.hotelArray[i].roomID === roomID) {
+                    this.hotelArray.splice(this.hotelArray[i], 1);
+                    break;
+				}
+            }
+            if (i > this.hotelArray.length) {
+                console.log("No Room Was Found With That ID");
+            }
+
+        } else {
+		    return("No guests are currently staying, can't checkout a guest that doesn't have a room");
+		}
 	}
 	this.getVacancyCount = function(){
 		//returns the number of unoccupied rooms
+		return (this.totalRooms - this.hotelArray.length);
 	}
 }
 
+var motel = new Hotel();
 
 	</script>
 </head>
